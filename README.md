@@ -22,4 +22,4 @@
 Assuming you're using the player named FOOBAR
     /player foobar
     /np
-If that doesn't work, you've found a bug or aren't using an MRPIS2-compatible media player.
+If that doesn't work, you've found a bug or aren't using an MPRIS2-compatible media player.
