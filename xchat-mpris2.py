@@ -37,7 +37,7 @@ def saveConfig():
     f.write(player)
 
 def status(str):
-  xchat.prnt("[%s] %s" % (player, str))
+  xchat.prnt(u"[%s] %s" % (player, str))
 
 # Pass in milliseconds, get (minutes, seconds)
 def parseSongPosition(time):
@@ -97,25 +97,20 @@ def getSongInfo():
 
 def getPlayerVersion():
   try:
-    remote_object = bus.get_object("org.mpris.MediaPlayer2.%s" % (player), "/org/mpris/MediaPlayer2")
-    iface = dbus.Interface(remote_object, "org.freedesktop.MediaPlayer2")
-    version = iface.Identity()
-    
+    return getProperty("/org/mpris/MediaPlayer2", "org.mpris.MediaPlayer2.Identity")
   except dbus.exceptions.DBusException:
-    xchat.prnt("DBus Exception")
     return "DBus Exception"
-  return version
 
 def mprisPlayerVersion(word, word_eol, userdata):
   if isPlayerSpecified():
-    xchat.prnt(getPlayerVersion())
+    xchat.prnt(str(getPlayerVersion()))
   return xchat.EAT_ALL
 
 def mprisNp(word, word_eol, userdata):
   if isPlayerSpecified():
     info = getSongInfo()
     if not info == False:
-      xchat.command("ME is listening to %s - %s [%s] [%s/%s]" % info)
+      xchat.command(u"ME is listening to %s - %s [%s] [%s/%s]" % info)
     else:
       xchat.prnt("Error in getSongInfo()")
   return xchat.EAT_ALL
@@ -128,14 +123,14 @@ def mprisPlayer(word, word_eol, userdata):
     if not isPlayerSpecified():
       pass
     elif oldplayer != '' and oldplayer != player:
-      xchat.prnt("Media player changed from \"%s\" to \"%s\"" % (oldplayer, player))
+      xchat.prnt(u"Media player changed from \"%s\" to \"%s\"" % (oldplayer, player))
     else:
-      xchat.prnt("Media player set to \"%s\"" % player)
+      xchat.prnt(u"Media player set to \"%s\"" % player)
     saveConfig()
     return xchat.EAT_ALL
   else:
     pass
-  xchat.prnt("USAGE: %s <player name>, set default meda player." % word[0])
+  xchat.prnt(u"USAGE: %s <player name>, set default meda player." % word[0])
   return xchat.EAT_ALL
 
 def mprisPlay(word, word_eol, userdata):
@@ -188,11 +183,12 @@ def mprisNext(word, word_eol, userdata):
     pass
   return xchat.EAT_ALL
 
+xchat.prnt("MPRIS2 now playing script initialized")
 
 if isConfigured():
   loadConfig()
+  xchat.prnt(u"Current media player is %s" % player)
 
-xchat.prnt("MPRIS2 now playing script initialized")
 xchat.prnt("Use /player <player name> to specify the media player you are using.")
 xchat.prnt("Use /np to send information on the current song to the active channel.")
 xchat.prnt("Also provides: /next, /prev, /play, /pause, /stop, /playerversion")
