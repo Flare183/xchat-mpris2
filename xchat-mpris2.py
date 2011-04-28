@@ -130,7 +130,7 @@ def mprisPlayer(word, word_eol, userdata):
     return xchat.EAT_ALL
   else:
     pass
-  xchat.prnt(u"USAGE: %s <player name>, set default meda player." % word[0])
+  xchat.prnt(u"USAGE: %s <player name>, set default media player." % word[0])
   return xchat.EAT_ALL
 
 def mprisPlay(word, word_eol, userdata):
